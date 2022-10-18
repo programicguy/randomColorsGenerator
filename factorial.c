@@ -1,20 +1,28 @@
 #include <stdio.h>
 
+long factorial(int n);
+
 int main()
 {
-    int num, rem, sum = 0;
-    printf("Please enter a positive number :");
-    scanf("%d", &num);
+    int n;
+    long f;
 
-    int temp = num;
+    printf("Please enter a integer number : ");
+    scanf("%d", &n);
 
-    while(temp != 0) {
-        rem = temp % 10;
-        sum += rem;
-        temp /= 10;
-    }
+    if(n < 0) 
+        printf("Negative integer number is not defined!");
+    else 
+        f = factorial(n);
+        printf("%d! = %ld", n, f);
 
-    printf("The sum of digit = %c \n", sum - 32);
 
     return 0;
+}
+
+long factorial(int n) {
+    if(n == 0)
+        return 1;
+    else 
+        return n*factorial(n-1);
 }
