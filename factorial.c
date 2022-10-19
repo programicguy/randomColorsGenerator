@@ -14,7 +14,7 @@ int main()
         printf("Negative integer number is not defined!");
     else 
         f = factorial(n);
-        printf("%d! = %ld", n, f);
+        printf("%d! = %ld \n", n, f);
 
 
     return 0;
