@@ -6,14 +6,16 @@ function main() {
   // Initially create color palettes
   createColorPalates();
 
-
   // Color change on button onclick
   const btn = getDomElementsError(".btn");
-  
+  btn.addEventListener("click", updateColors);
 
-  btn.addEventListener("click", function() {
-    updateColors;
-    
+  // Event listener for dropdown change
+    const selectOptions = getDomElementsError(".select-options")
+
+  selectOptions.addEventListener("change", function () {
+    const selectedCount = parseInt(this.value, 10);
+    createColorPalates(selectedCount);
   });
 }
 
@@ -80,15 +82,17 @@ function getDomElementsError(id) {
 }
 
 // Create color palates
-function createColorPalates() {
-  const colorPalateParent = document.querySelector(".colors-palates");
+function createColorPalates(count = 10) {
+  const colorPalateParent = getDomElementsError(".colors-palates");
+  colorPalateParent.innerHTML = "";
+  const totalCount = getDomElementsError(".total-color-palate");
   const fragment = document.createDocumentFragment();
   if (!colorPalateParent) {
     console.error(`Error: .colors-palates container not found`);
     return;
   }
 
-  for(let i = 1; i <= 10; i++) {
+  for(let i = 1; i <= count; i++) {
     const colors = decimalNumberGenerator();
     const colorPalate = document.createElement("div");
     colorPalate.innerHTML = `
@@ -112,24 +116,66 @@ function createColorPalates() {
     fragment.appendChild(colorPalate);
     
   }
+  totalCount.textContent = count;
 
   colorPalateParent.appendChild(fragment);
 }
 
-
-
-// Update the color 
+// // Update existing colors
 function updateColors() {
     const colorPalates = document.querySelectorAll(".color-palate") 
     
     colorPalates.forEach((palate) => {
         const colors = decimalNumberGenerator();
 
+        // Update the background color
         palate.querySelector(".display-color").style.background = colors.hex;
-        console.log(palate);
+
+        // Update HEX, RGB, and HSL text values
+        palate.querySelector(".hex span:last-child").textContent = colors.hex;
+        palate.querySelector(".rgb span:last-child").textContent = colors.rgb;
+        palate.querySelector(".hsl span:last-child").textContent = colors.hsl;
         
     })
-    
 }
+
+// Function to create and show a toast notification
+function showToast(color) {
+    // Clone the existing toast
+    const existingToast = document.querySelector(".toast");
+    if (!existingToast) return console.error("Toast element not found!");
+
+    // Create a new toast instance
+    const newToast = existingToast.cloneNode(true);
+    newToast.classList.add("active"); // Make it visible
+    newToast.querySelector(".copied-color").textContent = color; // Update color text
+
+    // Append to body (this will stack them)
+    document.body.appendChild(newToast);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        newToast.classList.remove("active");
+        setTimeout(() => newToast.remove(), 300); // Ensure smooth removal
+    }, 3000);
+}
+
+// Function to copy text to clipboard
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast(text); // Show toast when copied
+    });
+}
+
+// Event listener to handle clicks on color codes
+document.addEventListener("click", function (event) {
+    const clickedElement = event.target;
+    if (clickedElement.closest(".hex span:last-child") ||
+        clickedElement.closest(".rgb span:last-child") ||
+        clickedElement.closest(".hsl span:last-child")) {
+        copyToClipboard(clickedElement.textContent.trim());
+    }
+});
+
 
 
