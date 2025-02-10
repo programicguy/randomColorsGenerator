@@ -1,4 +1,293 @@
+/* === Root Variables === */
+:root {
+    --font-primary: 'Roboto', sans-serif;
+    --color-bg: #121212;
+    --color-text: #ffffff;
+    --color-primary: #22c55e;
+    --color-secondary: #a5a5a4;
+    --custom-color: #505050;
+}
+
+/* === Global Styles === */
 body {
-    background-color: black;
+    font-family: var(--font-primary);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 1.6;
+}
+
+/* === SVG Animated Background === */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1' d='M 0 20 L 20 0'/></svg>");
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* === Button Styles === */
+.btn {
+    display: inline-block;
+    padding: 1rem 5rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: var(--color-text);
+}
+
+.btn:hover {
+    background: var(--color-bg);
+    border: 1px solid var(--color-primary);
+}
+
+/* === Other Styles === */
+section {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 .5rem;
+}
+
+.header {
+    text-align: center;
+    padding: 20px 0;
+    margin: 50px 0;
+}
+
+.title {
+    font-size: 2.5rem;
+}
+
+/* Gradinet text  */
+.gradient-text {
+    background: linear-gradient(90deg, #ff7e5f, #feb47b, #86a8e7, #7f7fd5);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 1s infinite alternate ease-in-out;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Animated button  */
+.animated-btn {
+    background: linear-gradient(90deg, var(--color-primary), #feb47b, var(--color-secondary), var(--color-primary));
+    background-size: 300% 300%;
+    animation: gradientMove 3s infinite alternate ease-in-out;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.colors-palates {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.display-color {
+    width: 100%;
+    height: 120px;
+    background: #9e9c0f;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    position: relative;
+}
+
+.display-color::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    transition: opacity .3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.display-color:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.colors-code {
+    padding: 0.5rem;
+    border: 1px solid #303030;
+    background: #121519;
+    border-bottom-left-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+}
+
+.colors-code>div {
+    display: flex;
+    align-items: center;
+    justify-content: baseline;
+    margin: 0.3rem 0;
+}
+
+.hex span,
+.rgb span,
+.hsl span {
+    font-size: 12px;
+    color: var(--color-secondary);
+    font-weight: bolder;
+    cursor: pointer;
+    user-select: none;
+    transition: color .1s ease-in;
+}
+
+.hex:hover span,
+.rgb:hover span,
+.hsl:hover span {
+    color: var(--color-text) !important;
+}
+
+.colors-code>div>span:first-child {
+    color: var(--custom-color);
+    font-weight: 500;
+}
+
+.colors-code>div>span:last-child {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 110px;
+    min-width: 30px;
+    margin-left: 0.4rem;
+}
+
+/* === Tooltip Container === */
+.hex,
+.rgb,
+.hsl {
+    position: relative;
+    cursor: pointer;
+}
+
+/* Tooltip Text (Hidden by Default) */
+.hex::after,
+.rgb::after,
+.hsl::after {
+    content: "Click to copy";
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-primary);
     color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.3rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    pointer-events: none;
+}
+
+/* Show Tooltip on Hover */
+.hex:hover::after,
+.rgb:hover::after,
+.hsl:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-3px);
+}
+
+
+
+/* Toast Notification Styles */
+.toast {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    max-width: calc(100% - 2rem);
+    width: max-content;
+    animation: slideIn 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.toast.active {
+    display: flex;
+}
+
+.toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.toast-message {
+    line-height: 1.4;
+}
+
+.toast.success {
+    background: var(--color-primary);
+    color: white;
+}
+
+.toast.success .toast-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+.copied-color {
+    font-size: 1rem;
+    font-weight: bolder;
+    margin: 0 0.2rem;
+}
+
+
+/* Toast animation */
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
 }
